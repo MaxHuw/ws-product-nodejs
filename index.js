@@ -29,8 +29,10 @@ app.get('/events/hourly', (req, res, next) => {
     SELECT date, hour, events
     FROM public.hourly_events
     ORDER BY date, hour
-    LIMIT 168;
+    LIMIT 20;
   `
+
+  //limit was 168
   return next()
 }, queryHandler)
 
