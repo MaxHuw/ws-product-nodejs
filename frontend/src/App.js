@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Charts from './components/_charts.js';
+import Table from './components/_table.js';
+import Map from './components/_map.js';
+
 
 class App extends Component {
 
@@ -26,6 +30,9 @@ class App extends Component {
             Test API:
             {JSON.stringify(this.state.data)}
           </p>
+          <Charts />
+          <Table />
+          <Map />
         </header>
       </div>
     );

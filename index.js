@@ -71,6 +71,27 @@ app.get('/stats/daily', (req, res, next) => {
   return next()
 }, queryHandler)
 
+//Max Experimenet
+app.get('/stats/all', (req, res, next) => {
+  req.sqlQuery = `
+    SELECT *
+    FROM public.hourly_stats
+    LIMIT 20;
+  `
+  return next()
+}, queryHandler)
+
+app.get('/events/all', (req, res, next) => {
+  req.sqlQuery = `
+    SELECT *
+    FROM public.hourly_events
+    LIMIT 20;
+  `
+  return next()
+}, queryHandler)
+
+//////
+
 app.get('/poi', (req, res, next) => {
   req.sqlQuery = `
     SELECT *
