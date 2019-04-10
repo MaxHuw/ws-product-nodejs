@@ -9,13 +9,34 @@ import Map from './components/_map.js';
 class App extends Component {
 
   state = {
-    data: 'Loading...'
+    chartData: [],
+    parsedData: {}
   }
 
   testAPI = () => {
     fetch('/events/hourly')
       .then(results => results.json())
-      .then(results => this.setState({data: results}))
+      .then(results => this.setState({chartData: results}))
+      .then( () => this.parseChartData())
+      // .then(console.log("Chart data: ",this.state.chartData))
+  }
+
+  parseChartData = () => {
+    let rawData = (this.state.chartData);
+    let parsedData = {};
+    console.log("Raw Data: ", rawData);
+
+    rawData.forEach(element => {
+      if(!parsedData[element.hour]){
+        parsedData[element.hour] = element.events;
+      } else {
+        parsedData[element.hour] += element.events;
+      }
+    });
+
+    this.setState({parsedData: parsedData})
+
+    console.log("Parsed data: ", parsedData)
   }
 
   componentDidMount() {
@@ -28,9 +49,9 @@ class App extends Component {
         <header className="App-header">
           <p>
             Test API:
-            {JSON.stringify(this.state.data)}
+            {JSON.stringify(this.state.chartData)}
           </p>
-          <Charts />
+          <Charts parsedChartData={this.state.parsedData} />
           <Table />
           <Map />
         </header>
