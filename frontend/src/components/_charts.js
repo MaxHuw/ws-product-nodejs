@@ -28,7 +28,14 @@ class Charts extends React.Component {
         title: {
           display: true,
           text: 'Total Number of Events by Hour.'
-        }
+        },
+        scales: {
+          yAxes: [{
+              ticks: {
+                  beginAtZero: true
+              }
+          }]
+      }
       }
     });
 
@@ -55,7 +62,14 @@ class Charts extends React.Component {
         title: {
           display: true,
           text: 'Total Number of Events by Hour.'
-        }
+        },
+        scales: {
+          yAxes: [{
+              ticks: {
+                  beginAtZero: true
+              }
+          }]
+      }
       }
     });
 

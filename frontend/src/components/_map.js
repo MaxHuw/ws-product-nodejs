@@ -5,6 +5,14 @@ import { isArray } from 'util';
 
 
 class Map extends React.Component {
+
+  state = {
+  }
+
+  selectedData = (event) => {
+    this.setState({selectedGeoData: event.target.value});
+  }
+
   componentDidMount(){
 
   }
@@ -14,9 +22,9 @@ class Map extends React.Component {
     if (isArray(this.props.geoData)){
       return (
         <div>
-          <div className="ui form">
+          <form className="ui form">
             <div className="field">
-              <select>
+              <select onChange={this.selectedData}>
                 <option value="">Data</option>
                 <option value="events">Events</option>
                 <option value="impressions">Impressions</option>
@@ -24,7 +32,7 @@ class Map extends React.Component {
                 <option value="revenue">Revenue</option>
               </select>
             </div>
-          </div>
+          </form>
 
           <LeafletMap
             center={[50, -100]}
