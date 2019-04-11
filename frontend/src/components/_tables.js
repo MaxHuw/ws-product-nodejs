@@ -35,15 +35,17 @@ class Tables extends React.Component {
           </Table.Header>
 
           <Table.Body>
-            <Table.Row>
-              <Table.Cell>Cell</Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell>Cell</Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell>Cell</Table.Cell>
-            </Table.Row>
+            {
+              (this.props.data).map((entry, i) =>
+              <Table.Row key={i}>
+                {
+                  Object.values(entry).map((value, i) =>
+                    <Table.Cell key={i}>{value}</Table.Cell>
+                  )
+                }
+              </Table.Row>
+              )
+            }
           </Table.Body>
 
           <Table.Footer>
