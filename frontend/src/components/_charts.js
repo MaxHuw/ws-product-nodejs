@@ -64,8 +64,6 @@ class Charts extends React.Component {
   render() {
     return (
       <div>
-        <p>This is where the Charts will go.</p>
-        {/* {JSON.stringify(this.props.chartData)} */}
         <canvas id="bar-chart" width="800" height="450"></canvas>
       </div>
     );

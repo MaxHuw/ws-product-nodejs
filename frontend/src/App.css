@@ -35,4 +35,18 @@
 .leaflet-container {
   height: 400px;
   width: 800px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.chart-container {
+  width: 800px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.table-container {
+  width: 800px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }

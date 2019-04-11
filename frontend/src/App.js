@@ -19,7 +19,6 @@ class App extends Component {
       .then(results => results.json())
       .then(results => this.setState({chartData: results}))
       .then( () => this.parseChartData())
-      // .then(console.log("Chart data: ",this.state.chartData))
   };
 
   poiData = () => {
@@ -55,13 +54,19 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <p>
-            Test API:
-            {JSON.stringify(this.state.chartData)}
-          </p>
-          <Charts parsedChartData={this.state.parsedData} />
-          <Tables data={this.state.chartData}/>
-          <Map geoData={this.state.geoData}/>
+          
+          <div className="chart-container">
+            <Charts parsedChartData={this.state.parsedData} />
+          </div>
+          
+          <div className="table-container">
+            <Tables data={this.state.chartData}/>
+          </div>
+
+          <div className="map-container">
+            <Map geoData={this.state.geoData}/>
+          </div>
+
         </header>
       </div>
     );
