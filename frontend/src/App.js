@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Charts from './components/_charts.js';
-import Table from './components/_table.js';
+import Tables from './components/_tables.js';
 import Map from './components/_map.js';
 
 
 class App extends Component {
 
   state = {
-    chartData: [],
+    chartData: {},
     parsedData: {}
   }
 
@@ -52,7 +52,7 @@ class App extends Component {
             {JSON.stringify(this.state.chartData)}
           </p>
           <Charts parsedChartData={this.state.parsedData} />
-          <Table />
+          <Tables data={this.state.chartData}/>
           <Map />
         </header>
       </div>

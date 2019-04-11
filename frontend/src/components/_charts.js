@@ -1,5 +1,4 @@
 import React from "react";
-import { isArray } from "util";
 
 const Chart = require("chart.js")
 
