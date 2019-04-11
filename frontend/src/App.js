@@ -10,7 +10,8 @@ class App extends Component {
 
   state = {
     chartData: {},
-    parsedData: {}
+    parsedData: {},
+
   }
 
   testAPI = () => {
@@ -19,6 +20,12 @@ class App extends Component {
       .then(results => this.setState({chartData: results}))
       .then( () => this.parseChartData())
       // .then(console.log("Chart data: ",this.state.chartData))
+  };
+
+  poiData = () => {
+    fetch('/poi')
+      .then(results => results.json())
+      .then(results => this.setState({geoData: results}))
   }
 
   parseChartData = () => {
@@ -41,6 +48,7 @@ class App extends Component {
 
   componentDidMount() {
     this.testAPI();
+    this.poiData();
   }
 
   render() {
@@ -53,7 +61,7 @@ class App extends Component {
           </p>
           <Charts parsedChartData={this.state.parsedData} />
           <Tables data={this.state.chartData}/>
-          <Map />
+          <Map geoData={this.state.geoData}/>
         </header>
       </div>
     );
