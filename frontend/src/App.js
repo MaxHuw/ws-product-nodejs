@@ -9,7 +9,7 @@ import Map from './components/_map.js';
 class App extends Component {
 
   state = {
-    chartData: [],
+    chartData: {},
     parsedData: {}
   }
 
@@ -52,7 +52,7 @@ class App extends Component {
             {JSON.stringify(this.state.chartData)}
           </p>
           <Charts parsedChartData={this.state.parsedData} />
-          <Tables />
+          <Tables data={this.state.chartData}/>
           <Map />
         </header>
       </div>
