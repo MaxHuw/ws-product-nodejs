@@ -9,9 +9,9 @@ class Map extends React.Component {
   state = {
   }
 
-  selectedData = (event) => {
-    this.setState({selectedGeoData: event.target.value});
-  }
+  // selectedGeoData = (event) => {
+  //   this.setState({selectedGeoData: event.target.value});
+  // }
 
   componentDidMount(){
 
@@ -24,7 +24,7 @@ class Map extends React.Component {
         <div>
           <form className="ui form">
             <div className="field">
-              <select onChange={this.selectedData}>
+              <select onChange={this.props.selectedGeoData}>
                 <option value="">Data</option>
                 <option value="events">Events</option>
                 <option value="impressions">Impressions</option>

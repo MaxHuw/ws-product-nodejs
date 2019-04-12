@@ -10,15 +10,16 @@ class App extends Component {
 
   state = {
     chartData: {},
-    parsedData: {},
+    parsedData: {}
 
   }
 
   testAPI = () => {
-    fetch('/events/hourly')
+    fetch('/events/hourly/:userInput')
       .then(results => results.json())
       .then(results => this.setState({chartData: results}))
       .then( () => this.parseChartData())
+      // .then(console.log("Chart data: ",this.state.chartData))
   };
 
   poiData = () => {
@@ -45,8 +46,12 @@ class App extends Component {
     console.log("Parsed data: ", parsedData)
   }
 
+  selectedGeoData = (event) => {
+    this.setState({selectedGeoData: event.target.value});
+  }
+
   componentDidMount() {
-    this.testAPI();
+    // this.testAPI();
     this.poiData();
   }
 
@@ -56,7 +61,7 @@ class App extends Component {
         <header className="App-header">
           
           <div className="chart-container">
-            <Charts parsedChartData={this.state.parsedData} />
+            <Charts parsedChartData={this.state.parsedData} testAPI={this.testAPI} />
           </div>
           
           <div className="table-container">
@@ -64,9 +69,8 @@ class App extends Component {
           </div>
 
           <div className="map-container">
-            <Map geoData={this.state.geoData}/>
+            <Map geoData={this.state.geoData} selectedGeoData={this.selectedGeoData}/>
           </div>
-
         </header>
       </div>
     );
