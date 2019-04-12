@@ -36,10 +36,19 @@ app.get('/events/hourly/:userInput', (req, res, next) => {
   return next()
 }, queryHandler)
 
-app.get('/events/daily/:userInput', (req, res, next) => {
+app.get('/events/daily/', (req, res, next) => {
+  let start = req.query.start;
+  // let start = '2017-01-01';
+  let end = req.query.end;
+  // let end = '2017-04-23';
+  console.log("start: ", start)
+
   req.sqlQuery = `
     SELECT date, SUM(events) AS events
     FROM public.hourly_events
+    WHERE 
+      date  >= '${start}' 
+      AND date < '${end}'
     GROUP BY date
     ORDER BY date
     LIMIT 7;
@@ -74,17 +83,31 @@ app.get('/stats/daily/:userInput', (req, res, next) => {
 //Max Experimenet
 app.get('/stats/all', (req, res, next) => {
   req.sqlQuery = `
-    SELECT *
+    SELECT poi_id,
+      SUM(impressions) AS impressions,
+      SUM(clicks) AS clicks,
+      SUM(revenue) AS revenue
     FROM public.hourly_stats
+    GROUP BY poi_id
+    ORDER BY poi_id
     LIMIT 20;
   `
   return next()
 }, queryHandler)
 
 app.get('/events/all', (req, res, next) => {
+
+  let start = req.query.start;
+  let end = req.query.end;
+
   req.sqlQuery = `
-    SELECT *
+    SELECT poi_id, SUM(events) AS events
     FROM public.hourly_events
+    WHERE 
+      date  >= '${start}' 
+      AND date < '${end}'
+    GROUP BY poi_id
+    ORDER BY poi_id
     LIMIT 20;
   `
   return next()

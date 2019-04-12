@@ -50,6 +50,18 @@ class App extends Component {
     this.setState({selectedGeoData: event.target.value});
   }
 
+  // filteredGeoData = () => {
+  //   if (selectedGeoData === "events"){
+  //     fetch(`/events/daily/?filter=${selectedGeoData}&start=${startDate}&end=${endDate}`)
+  //       .then(results => results.json())
+  //       .then(results => this.setState({filteredGeoData: results}))
+  //   } else {
+  //     fetch(`/stats/daily/?filter=${selectedGeoData}&start=${startDate}&end=${endDate}`)
+  //       .then(results => results.json())
+  //       .then(results => this.setState({filteredGeoData: results}))
+  //   }
+  // }
+
   componentDidMount() {
     // this.testAPI();
     this.poiData();
