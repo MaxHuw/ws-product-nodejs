@@ -101,13 +101,14 @@ app.get('/events/all', (req, res, next) => {
   let end = req.query.end;
 
   req.sqlQuery = `
-    SELECT poi_id, SUM(events) AS events
-    FROM public.hourly_events
+    SELECT x.poi_id AS poi, SUM(x.events) AS events, y.name AS poi_name, y.lat AS poi_lat, y.lon AS poi_lon
+    FROM public.hourly_events x
+    JOIN public.poi y ON x.poi_id = y.poi_id
     WHERE 
       date  >= '${start}' 
       AND date < '${end}'
-    GROUP BY poi_id
-    ORDER BY poi_id
+    GROUP BY poi, poi_name, poi_lat, poi_lon
+    ORDER BY poi, poi_name, poi_lat, poi_lon
     LIMIT 20;
   `
   return next()
