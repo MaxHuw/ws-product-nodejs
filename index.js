@@ -24,22 +24,30 @@ app.get('/', (req, res) => {
   res.send('Welcome to EQ Works 😎')
 })
 
-app.get('/events/hourly', (req, res, next) => {
+app.get('/events/hourly/:userInput', (req, res, next) => {
   req.sqlQuery = `
     SELECT date, hour, events
     FROM public.hourly_events
     ORDER BY date, hour
-    LIMIT 20;
+    LIMIT 10;
   `
 
   //limit was 168
   return next()
 }, queryHandler)
 
-app.get('/events/daily', (req, res, next) => {
+app.get('/events/daily/', (req, res, next) => {
+  
+  let start = req.query.start;
+  let end = req.query.end;
+  console.log("start: ", start)
+
   req.sqlQuery = `
     SELECT date, SUM(events) AS events
     FROM public.hourly_events
+    WHERE 
+      date  >= '${start}' 
+      AND date < '${end}'
     GROUP BY date
     ORDER BY date
     LIMIT 7;
@@ -57,7 +65,7 @@ app.get('/stats/hourly', (req, res, next) => {
   return next()
 }, queryHandler)
 
-app.get('/stats/daily', (req, res, next) => {
+app.get('/stats/daily/:userInput', (req, res, next) => {
   req.sqlQuery = `
     SELECT date,
         SUM(impressions) AS impressions,
@@ -72,19 +80,40 @@ app.get('/stats/daily', (req, res, next) => {
 }, queryHandler)
 
 //Max Experimenet
-app.get('/stats/all', (req, res, next) => {
+app.get('/stats/all/', (req, res, next) => {
+
+  let start = req.query.start;
+  let end = req.query.end;
+  let selection = req.query.selection;
+
   req.sqlQuery = `
-    SELECT *
-    FROM public.hourly_stats
+    SELECT x.poi_id AS poi, SUM(${selection}) AS ${selection}, y.name AS poi_name, y.lat AS poi_lat, y.lon AS poi_lon
+    FROM public.hourly_stats x
+    JOIN public.poi y ON x.poi_id = y.poi_id
+    WHERE 
+      date  >= '${start}' 
+      AND date < '${end}'
+      GROUP BY poi, poi_name, poi_lat, poi_lon
+      ORDER BY poi, poi_name, poi_lat, poi_lon
     LIMIT 20;
   `
   return next()
 }, queryHandler)
 
-app.get('/events/all', (req, res, next) => {
+app.get('/events/all/', (req, res, next) => {
+
+  let start = req.query.start;
+  let end = req.query.end;
+
   req.sqlQuery = `
-    SELECT *
-    FROM public.hourly_events
+    SELECT x.poi_id AS poi, SUM(x.events) AS events, y.name AS poi_name, y.lat AS poi_lat, y.lon AS poi_lon
+    FROM public.hourly_events x
+    JOIN public.poi y ON x.poi_id = y.poi_id
+    WHERE 
+      date  >= '${start}' 
+      AND date < '${end}'
+    GROUP BY poi, poi_name, poi_lat, poi_lon
+    ORDER BY poi, poi_name, poi_lat, poi_lon
     LIMIT 20;
   `
   return next()

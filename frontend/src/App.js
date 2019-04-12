@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Charts from './components/_charts.js';
 import Tables from './components/_tables.js';
@@ -10,15 +9,26 @@ class App extends Component {
 
   state = {
     chartData: {},
-    parsedData: {}
+    parsedData: {},
+    endDate: '2017-04-23',
+    startDate: '2017-01-01',
+    selectedGeoData: "events",
+    filteredGeoData: []
+
   }
 
   testAPI = () => {
-    fetch('/events/hourly')
+    fetch('/events/hourly/:userInput')
       .then(results => results.json())
       .then(results => this.setState({chartData: results}))
       .then( () => this.parseChartData())
       // .then(console.log("Chart data: ",this.state.chartData))
+  };
+
+  poiData = () => {
+    fetch('/poi')
+      .then(results => results.json())
+      .then(results => this.setState({geoData: results}))
   }
 
   parseChartData = () => {
@@ -39,21 +49,49 @@ class App extends Component {
     console.log("Parsed data: ", parsedData)
   }
 
+  selectedGeoData = (event) => {
+    this.setState({selectedGeoData: event.target.value});
+  }
+
+  filterGeoData = (event) => {
+    event.preventDefault();
+
+    if (this.state.selectedGeoData === "events"){
+      fetch(`/events/all/?selection=${this.state.selectedGeoData}&start=${this.state.startDate}&end=${this.state.endDate}`)
+        .then(results => results.json())
+        .then(results => this.setState({filteredGeoData: results}))
+    } else {
+      fetch(`/stats/all/?selection=${this.state.selectedGeoData}&start=${this.state.startDate}&end=${this.state.endDate}`)
+        .then(results => results.json())
+        .then(results => this.setState({filteredGeoData: results}))
+    }
+  }
+
+  handleChangeStartDate = (event) => this.setState({startDate: event.target.value});
+  handleChangeEndDate = (event) => this.setState({endDate: event.target.value});
+
+
   componentDidMount() {
-    this.testAPI();
+    // this.testAPI();
+    // this.poiData();
   }
 
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <p>
-            Test API:
-            {JSON.stringify(this.state.chartData)}
-          </p>
-          <Charts parsedChartData={this.state.parsedData} />
-          <Tables data={this.state.chartData}/>
-          <Map />
+          
+          <div className="chart-container">
+            <Charts parsedChartData={this.state.parsedData} testAPI={this.testAPI} />
+          </div>
+          
+          <div className="table-container">
+            <Tables data={this.state.chartData}/>
+          </div>
+
+          <div className="map-container">
+            <Map geoData={this.state.geoData} filteredGeoData={this.state.filteredGeoData} filterGeoData={this.filterGeoData} selectedGeoData={this.state.selectedGeoData} handleChangeStartDate={this.handleChangeStartDate} handleChangeEndDate={this.handleChangeEndDate} />
+          </div>
         </header>
       </div>
     );
