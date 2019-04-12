@@ -1,17 +1,9 @@
 import React from "react";
 import { Map as LeafletMap, TileLayer, Marker, Popup } from 'react-leaflet';
-import { Icon, Label, Menu, Table } from 'semantic-ui-react'
 import { isArray } from 'util';
 
 
 class Map extends React.Component {
-
-  state = {
-  }
-
-  // selectedGeoData = (event) => {
-  //   this.setState({selectedGeoData: event.target.value});
-  // }
 
   componentDidMount(){
 
@@ -19,10 +11,10 @@ class Map extends React.Component {
   
   render() {
 
-    if (isArray(this.props.geoData)){
+    // if (isArray(this.props.geoData)){
       return (
         <div>
-          <form className="ui form">
+          <form className="ui form" onSubmit={this.props.filterGeoData}>
             <div className="field">
               <select onChange={this.props.selectedGeoData}>
                 <option value="">Data</option>
@@ -32,6 +24,18 @@ class Map extends React.Component {
                 <option value="revenue">Revenue</option>
               </select>
             </div>
+            
+            <div className="field">
+              <label>Start Date</label>
+              <input type="text" name="start-date" placeholder="yyyy-mm-dd" onChange={this.props.handleChangeStartDate}></input>
+            </div>
+
+            <div className="field">
+              <label>End Date</label>
+              <input type="text" name="end-date" placeholder="yyyy-mm-dd" onChange={this.props.handleChangeEndDate}></input>
+            </div>
+
+            <button className="ui button" type="submit">Submit</button>
           </form>
 
           <LeafletMap
@@ -49,19 +53,21 @@ class Map extends React.Component {
             <TileLayer
               url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
             />
-            {(this.props.geoData).map((location, i) =>
-                <Marker key={i} position={[location.lat, location.lon]}>
+            {(this.props.filteredGeoData).map((location, i) =>
+                <Marker key={i} position={[location.poi_lat, location.poi_lon]}>
                   <Popup>
-                    {location.name}
+                    {location.poi_name} <br />
+                    {this.props.selectedGeoData} <br />
+                    {location[this.props.selectedGeoData]}
                   </Popup>
                 </Marker> 
               )}
           </LeafletMap>
         </div>  
       );
-    } else {
-      return <p>Loading...</p>
-    }
+  //   } else {
+  //     return <p>Loading...</p>
+  //   }
 
   }
 }

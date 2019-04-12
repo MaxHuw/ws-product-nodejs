@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Charts from './components/_charts.js';
 import Tables from './components/_tables.js';
@@ -10,7 +9,11 @@ class App extends Component {
 
   state = {
     chartData: {},
-    parsedData: {}
+    parsedData: {},
+    endDate: '2017-04-23',
+    startDate: '2017-01-01',
+    selectedGeoData: "events",
+    filteredGeoData: []
 
   }
 
@@ -50,21 +53,27 @@ class App extends Component {
     this.setState({selectedGeoData: event.target.value});
   }
 
-  // filteredGeoData = () => {
-  //   if (selectedGeoData === "events"){
-  //     fetch(`/events/daily/?filter=${selectedGeoData}&start=${startDate}&end=${endDate}`)
-  //       .then(results => results.json())
-  //       .then(results => this.setState({filteredGeoData: results}))
-  //   } else {
-  //     fetch(`/stats/daily/?filter=${selectedGeoData}&start=${startDate}&end=${endDate}`)
-  //       .then(results => results.json())
-  //       .then(results => this.setState({filteredGeoData: results}))
-  //   }
-  // }
+  filterGeoData = (event) => {
+    event.preventDefault();
+
+    if (this.state.selectedGeoData === "events"){
+      fetch(`/events/all/?selection=${this.state.selectedGeoData}&start=${this.state.startDate}&end=${this.state.endDate}`)
+        .then(results => results.json())
+        .then(results => this.setState({filteredGeoData: results}))
+    } else {
+      fetch(`/stats/all/?selection=${this.state.selectedGeoData}&start=${this.state.startDate}&end=${this.state.endDate}`)
+        .then(results => results.json())
+        .then(results => this.setState({filteredGeoData: results}))
+    }
+  }
+
+  handleChangeStartDate = (event) => this.setState({startDate: event.target.value});
+  handleChangeEndDate = (event) => this.setState({endDate: event.target.value});
+
 
   componentDidMount() {
     // this.testAPI();
-    this.poiData();
+    // this.poiData();
   }
 
   render() {
@@ -81,7 +90,7 @@ class App extends Component {
           </div>
 
           <div className="map-container">
-            <Map geoData={this.state.geoData} selectedGeoData={this.selectedGeoData}/>
+            <Map geoData={this.state.geoData} filteredGeoData={this.state.filteredGeoData} filterGeoData={this.filterGeoData} selectedGeoData={this.state.selectedGeoData} handleChangeStartDate={this.handleChangeStartDate} handleChangeEndDate={this.handleChangeEndDate} />
           </div>
         </header>
       </div>
