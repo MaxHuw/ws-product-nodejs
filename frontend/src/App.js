@@ -53,7 +53,7 @@ class App extends Component {
 
   // For user to selecte metrics for the Geo visualizer.
 
-  selectedGeoData = (event) => {
+  selectGeoData = (event) => {
     this.setState({selectedGeoData: event.target.value});
   }
 
@@ -102,7 +102,7 @@ class App extends Component {
           </div>
 
           <div className="map-container component-container">
-            <Map geoData={this.state.geoData} filteredGeoData={this.state.filteredGeoData} filterGeoData={this.filterGeoData} selectedGeoData={this.state.selectedGeoData} handleChangeStartDate={this.handleChangeStartDate} handleChangeEndDate={this.handleChangeEndDate} />
+            <Map geoData={this.state.geoData} filteredGeoData={this.state.filteredGeoData} filterGeoData={this.filterGeoData} selectedGeoData={this.state.selectedGeoData} selectGeoData={this.selectGeoData} handleChangeStartDate={this.handleChangeStartDate} handleChangeEndDate={this.handleChangeEndDate} />
           </div>
         </header>
       </div>

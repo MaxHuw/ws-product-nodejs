@@ -86,6 +86,8 @@ app.get('/stats/daily', (req, res, next) => {
 
 app.get('/stats/all/', (req, res, next) => {
 
+  console.log(req.connection.remoteAddress);
+
   let start = req.query.start;
   let end = req.query.end;
   let selection = req.query.selection;

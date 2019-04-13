@@ -14,7 +14,7 @@ class Map extends React.Component {
         <div>
           <form className="ui form" onSubmit={this.props.filterGeoData}>
             <div className="field">
-              <select onChange={this.props.selectedGeoData}>
+              <select onChange={this.props.selectGeoData}>
                 <option value="">Data</option>
                 <option value="events">Events</option>
                 <option value="impressions">Impressions</option>
