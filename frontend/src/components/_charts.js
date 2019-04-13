@@ -4,19 +4,10 @@ const Chart = require("chart.js")
 
 class Charts extends React.Component {
 
-  state = {
-    // parsedData: this.props.parsedChartData
-  }
+  ////////////////////
+  // Functions
 
-  componentDidMount(){
-
-    this.props.testAPI();
-
-  };
-
-  componentDidUpdate(){
-
-    console.log(this.props.parsedChartData);
+  renderChart = () => {
 
     new Chart(document.getElementById("bar-chart"), {
       type: 'bar',
@@ -45,6 +36,18 @@ class Charts extends React.Component {
       }
       }
     });
+
+  }
+
+  componentDidMount(){
+
+    this.renderChart();
+
+  };
+
+  componentDidUpdate(){
+
+    this.renderChart();
 
   }
 

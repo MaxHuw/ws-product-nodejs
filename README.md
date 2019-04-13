@@ -1,32 +1,27 @@
 Work Sample for Product Aspect, Node.js Variant
 ---
 
-[What is this for?](https://github.com/EQWorks/work-samples#what-is-this)
-
 ### Setup and Run
 
-The following are the recommended options, but you're free to use any means to get started.
+- Run 'npm install' in both the main, and 'frontend' folders.
+- Create '.env' file in main directory with appropriate environment variables.
+- Run 'npm start' in both the main and 'frontend' folders to launch application.
 
-#### Remote Option: Glitch.com
 
-1. [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/EQWorks/ws-product-nodejs)
-2. Populate `.env` file with the environment variables given in the problem set we send to you through email
-3. Click on `Show Live` and you should see `Welcome to EQ Works 😎`
+## Problems
 
-#### Local Option 1: Node.js 6.10+
+These were the requirements for the work sample.
 
-1. Clone this repository
-2. Install Node.js dependencies `$ npm install`
-3. Set environment variables given in the problem set we send to you through email and run `$ npm run dev`
-4. Open your browser and point to `localhost:5555` and you should see `Welcome to EQ Works 😎`
+### Server-Side
 
-#### Local Option 2: Docker (`docker-compose` needed)
+- Implement rate limiting on all of the API endpoints. This is a fairly open-ended problem. If you choose to implement this, the only requirement is not to use a too obviously off-the-shelf solution such as https://flask-limiter.readthedocs.io/en/stable/ or https://www.npmjs.com/package/express-rate-limit (or one of the API gateway services).
 
-1. Clone this repository
-2. Create and populate `.env` file with the environment variables given in the problem set we send to you through email
-3. `$ docker-compose up` (or `$ docker-compose up -d` to run as a daemon)
-4. Open your browser and point to `localhost:5555` and you should see `Welcome to EQ Works 😎`
+### Client-Side
 
-### Notes on working through the problems
-
-Make sure any additional Node.js level dependencies are properly added in `package.json`. We encourage a healthy mixture of your own implementations, and good choices of existing open-source libraries/tools. We will comment in the problems to indicate which ones cannot be solved purely through an off-the-shelf solution.
+- Implement a user interface with React.js that uses the API endpoints to provide data visualizations including one or more types of charts, a data table using [this Semantic UI example](https://github.com/Semantic-Org/Semantic-UI-React/blob/master/docs/src/examples/collections/Table/Types/TableExamplePagination.js) as a starting point, and a map-based geo visualization.
+- The data table component should be extended with the following search features:
+	1. Fuzzy search on table data.
+	2. Highlight of matched term(s).
+- The geo visualization should have the following features: 
+	1. The visualization should demonstrate the "intensity" of a user selected metrics (for example, `impressions`) of a user selected date/time range. This problem would require modification of existing `/stats/*` and `/events/*` series of endpoints on the API server side. You can check out the return of the `/poi` endpoint to understand what metadata are available from the `poi` table, or leverage a SQL client to explore it.
+	2. The map should allow certain degree of freedom in terms of zooming level, and allows user to see a "clustered" indicator when more than one POIs are too close to each other at the given zoom level.

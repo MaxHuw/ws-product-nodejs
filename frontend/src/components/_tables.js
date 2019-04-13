@@ -4,19 +4,15 @@ import { isArray } from 'util';
 
 class Tables extends React.Component {
 
-  state = {
-  }
-
-  testData = () => {
-    console.log("Test Data ", this.props.data)
-  }
+  //TODO: 1) Make search field work. 
+  //      2) Look into pagination.
 
   componentDidMount(){
-    this.testData()
+
   }
 
   componentDidUpdate(){
-    this.testData()
+    
   }
 
   render() {

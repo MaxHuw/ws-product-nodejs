@@ -2,6 +2,7 @@ const express = require('express')
 const pg = require('pg')
 const dotenv = require('dotenv').config();
 
+//TODO Rate Limiting on all API endpoints.
 
 const app = express()
 // configs come from standard PostgreSQL env vars
@@ -24,20 +25,19 @@ app.get('/', (req, res) => {
   res.send('Welcome to EQ Works 😎')
 })
 
-app.get('/events/hourly/:userInput', (req, res, next) => {
+app.get('/events/hourly', (req, res, next) => {
   req.sqlQuery = `
     SELECT date, hour, events
     FROM public.hourly_events
     ORDER BY date, hour
     LIMIT 10;
   `
-
   //limit was 168
   return next()
 }, queryHandler)
 
-app.get('/events/daily/', (req, res, next) => {
-  
+app.get('/events/daily', (req, res, next) => {
+
   let start = req.query.start;
   let end = req.query.end;
   console.log("start: ", start)
@@ -65,7 +65,7 @@ app.get('/stats/hourly', (req, res, next) => {
   return next()
 }, queryHandler)
 
-app.get('/stats/daily/:userInput', (req, res, next) => {
+app.get('/stats/daily', (req, res, next) => {
   req.sqlQuery = `
     SELECT date,
         SUM(impressions) AS impressions,
@@ -79,7 +79,11 @@ app.get('/stats/daily/:userInput', (req, res, next) => {
   return next()
 }, queryHandler)
 
-//Max Experimenet
+////////////////////////////////////////////////
+// APIs made from scratch.
+// Used for the geo visualization portion of the work sample.
+// Could have used existing routes, but decided to do my own.
+
 app.get('/stats/all/', (req, res, next) => {
 
   let start = req.query.start;
@@ -119,7 +123,7 @@ app.get('/events/all/', (req, res, next) => {
   return next()
 }, queryHandler)
 
-//////
+///////////////////////////////////
 
 app.get('/poi', (req, res, next) => {
   req.sqlQuery = `
