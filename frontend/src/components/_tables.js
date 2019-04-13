@@ -4,19 +4,12 @@ import { isArray } from 'util';
 
 class Tables extends React.Component {
 
-  state = {
-  }
-
-  testData = () => {
-    console.log("Test Data ", this.props.data)
-  }
-
   componentDidMount(){
-    this.testData()
+
   }
 
   componentDidUpdate(){
-    this.testData()
+    
   }
 
   render() {
