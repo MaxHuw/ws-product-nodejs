@@ -34,19 +34,39 @@
 
 .leaflet-container {
   height: 400px;
-  width: 800px;
   margin-top: 30px;
   margin-bottom: 30px;
 }
 
 .chart-container {
-  width: 800px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  align-content: center;
+}
+
+.table-container {
   margin-top: 30px;
   margin-bottom: 30px;
 }
 
-.table-container {
-  width: 800px;
-  margin-top: 30px;
-  margin-bottom: 30px;
+.form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.field {
+
+}
+
+.ui.button {
+  
+}
+
+.component-container {
+  width: 900px;
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
 }

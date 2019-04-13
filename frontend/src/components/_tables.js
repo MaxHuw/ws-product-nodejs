@@ -4,6 +4,9 @@ import { isArray } from 'util';
 
 class Tables extends React.Component {
 
+  //TODO: 1) Make search field work. 
+  //      2) Look into pagination.
+
   componentDidMount(){
 
   }

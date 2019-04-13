@@ -1,6 +1,5 @@
 import React from "react";
 import { Map as LeafletMap, TileLayer, Marker, Popup } from 'react-leaflet';
-import { isArray } from 'util';
 
 
 class Map extends React.Component {
@@ -11,7 +10,6 @@ class Map extends React.Component {
   
   render() {
 
-    // if (isArray(this.props.geoData)){
       return (
         <div>
           <form className="ui form" onSubmit={this.props.filterGeoData}>
@@ -26,13 +24,11 @@ class Map extends React.Component {
             </div>
             
             <div className="field">
-              <label>Start Date</label>
-              <input type="text" name="start-date" placeholder="yyyy-mm-dd" onChange={this.props.handleChangeStartDate}></input>
+              <input type="text" name="start-date" placeholder="Start Date yyyy-mm-dd" onChange={this.props.handleChangeStartDate}></input>
             </div>
 
             <div className="field">
-              <label>End Date</label>
-              <input type="text" name="end-date" placeholder="yyyy-mm-dd" onChange={this.props.handleChangeEndDate}></input>
+              <input type="text" name="end-date" placeholder="End Date yyyy-mm-dd" onChange={this.props.handleChangeEndDate}></input>
             </div>
 
             <button className="ui button" type="submit">Submit</button>
@@ -65,10 +61,6 @@ class Map extends React.Component {
           </LeafletMap>
         </div>  
       );
-  //   } else {
-  //     return <p>Loading...</p>
-  //   }
-
   }
 }
 

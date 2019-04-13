@@ -63,6 +63,8 @@ class App extends Component {
   filterGeoData = (event) => {
     event.preventDefault();
 
+    //TODO Check that date inputs are valid.
+
     if (this.state.selectedGeoData === "events"){
       fetch(`/events/all/?selection=${this.state.selectedGeoData}&start=${this.state.startDate}&end=${this.state.endDate}`)
         .then(results => results.json())
@@ -91,15 +93,15 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           
-          <div className="chart-container">
+          <div className="chart-container component-container">
             <Charts parsedChartData={this.state.parsedData} getChartData={this.getChartData} />
           </div>
           
-          <div className="table-container">
+          <div className="table-container component-container">
             <Tables data={this.state.chartData}/>
           </div>
 
-          <div className="map-container">
+          <div className="map-container component-container">
             <Map geoData={this.state.geoData} filteredGeoData={this.state.filteredGeoData} filterGeoData={this.filterGeoData} selectedGeoData={this.state.selectedGeoData} handleChangeStartDate={this.handleChangeStartDate} handleChangeEndDate={this.handleChangeEndDate} />
           </div>
         </header>

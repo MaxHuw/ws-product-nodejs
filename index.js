@@ -2,6 +2,7 @@ const express = require('express')
 const pg = require('pg')
 const dotenv = require('dotenv').config();
 
+//TODO Rate Limiting on all API endpoints.
 
 const app = express()
 // configs come from standard PostgreSQL env vars

@@ -4,13 +4,13 @@ Work Sample for Product Aspect, Node.js Variant
 ### Setup and Run
 
 - Run 'npm install' in both the main, and 'frontend' folders.
-- Create '.env' file with appropriate environment variables.
+- Create '.env' file in main directory with appropriate environment variables.
 - Run 'npm start' in both the main and 'frontend' folders to launch application.
 
 
 ## Problems
 
-These were the requirements for the work sameple.
+These were the requirements for the work sample.
 
 ### Server-Side
 
