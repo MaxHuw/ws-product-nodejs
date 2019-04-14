@@ -15,11 +15,43 @@ const pool = new pg.Pool({
   port: process.env.PGPORT
 })
 
+///////////////////////
+/// Rate limiter using Leaky Bucket
+let leakRate = setInterval(leakBucket, 5000)
+
+let usersBuckets = {
+  testBucket: 10
+}
+
+function leakBucket(){
+
+  for (let bucket in usersBuckets){
+    if (usersBuckets[bucket] > 0){
+      usersBuckets[bucket] -= 1;
+    }
+  }
+
+  console.log(usersBuckets)
+
+
+}
+
+function fillBucket(ip) {
+
+  usersBuckets[ip] = (usersBuckets[ip] + 1 ) || 1;
+  console.log(usersBuckets[ip], ' +1');
+
+}
+
+/////////////////////////////
+
 const queryHandler = (req, res, next) => {
   pool.query(req.sqlQuery).then((r) => {
     return res.json(r.rows || [])
   }).catch(next)
 }
+
+
 
 app.get('/', (req, res) => {
   res.send('Welcome to EQ Works 😎')
@@ -86,6 +118,7 @@ app.get('/stats/daily', (req, res, next) => {
 
 app.get('/stats/all/', (req, res, next) => {
 
+  fillBucket(req.connection.remoteAddress);
   console.log(req.connection.remoteAddress);
 
   let start = req.query.start;
