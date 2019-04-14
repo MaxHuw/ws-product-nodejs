@@ -63,13 +63,21 @@ const queryHandler = (req, res, next) => {
   }).catch(next)
 }
 
-
-
 app.get('/', (req, res) => {
+
+  if (checkBucket(req.connection.remoteAddress)){
+    return res.status(500).json({error: 'Rate Limit Exceeded'});
+  }
+
   res.send('Welcome to EQ Works 😎')
 })
 
 app.get('/events/hourly', (req, res, next) => {
+
+  if (checkBucket(req.connection.remoteAddress)){
+    return res.status(500).json({error: 'Rate Limit Exceeded'});
+  }
+
   req.sqlQuery = `
     SELECT date, hour, events
     FROM public.hourly_events
@@ -81,6 +89,10 @@ app.get('/events/hourly', (req, res, next) => {
 }, queryHandler)
 
 app.get('/events/daily', (req, res, next) => {
+
+  if (checkBucket(req.connection.remoteAddress)){
+    return res.status(500).json({error: 'Rate Limit Exceeded'});
+  }
 
   let start = req.query.start;
   let end = req.query.end;
@@ -100,6 +112,11 @@ app.get('/events/daily', (req, res, next) => {
 }, queryHandler)
 
 app.get('/stats/hourly', (req, res, next) => {
+
+  if (checkBucket(req.connection.remoteAddress)){
+    return res.status(500).json({error: 'Rate Limit Exceeded'});
+  }
+
   req.sqlQuery = `
     SELECT date, hour, impressions, clicks, revenue
     FROM public.hourly_stats
@@ -110,6 +127,11 @@ app.get('/stats/hourly', (req, res, next) => {
 }, queryHandler)
 
 app.get('/stats/daily', (req, res, next) => {
+
+  if (checkBucket(req.connection.remoteAddress)){
+    return res.status(500).json({error: 'Rate Limit Exceeded'});
+  }
+
   req.sqlQuery = `
     SELECT date,
         SUM(impressions) AS impressions,
@@ -129,9 +151,6 @@ app.get('/stats/daily', (req, res, next) => {
 // Could have used existing routes, but decided to do my own.
 
 app.get('/stats/all/', (req, res, next) => {
-
-  console.log('Bucket Full? ', checkBucket(req.connection.remoteAddress));
-  console.log(req.connection.remoteAddress);
 
   if (checkBucket(req.connection.remoteAddress)){
     return res.status(500).json({error: 'Rate Limit Exceeded'});
@@ -157,6 +176,10 @@ app.get('/stats/all/', (req, res, next) => {
 
 app.get('/events/all/', (req, res, next) => {
 
+  if (checkBucket(req.connection.remoteAddress)){
+    return res.status(500).json({error: 'Rate Limit Exceeded'});
+  }
+
   let start = req.query.start;
   let end = req.query.end;
 
@@ -177,6 +200,11 @@ app.get('/events/all/', (req, res, next) => {
 ///////////////////////////////////
 
 app.get('/poi', (req, res, next) => {
+
+  if (checkBucket(req.connection.remoteAddress)){
+    return res.status(500).json({error: 'Rate Limit Exceeded'});
+  }
+
   req.sqlQuery = `
     SELECT *
     FROM public.poi;

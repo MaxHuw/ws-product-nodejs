@@ -22,16 +22,32 @@ class App extends Component {
 
   getChartData = () => {
     fetch('/events/hourly')
-      .then(results => results.json())
+      .then(results => {
+        if(results.status === 500){
+          window.alert("Rate Limit Exceeded.");
+          throw new Error(results.status)
+        } else return results.json();
+      })
       .then(results => this.setState({chartData: results}))
       .then( () => this.parseChartData())
+      .catch(error => {
+        console.log("Error: ", error)
+      })
   };
 
   // Fetch data from poi api for basic map testing.
   poiData = () => {
     fetch('/poi')
-      .then(results => results.json())
+      .then(results => {
+        if(results.status === 500){
+          window.alert("Rate Limit Exceeded.");
+          throw new Error(results.status)
+        } else return results.json();
+      })
       .then(results => this.setState({geoData: results}))
+      .catch(error => {
+        console.log("Error: ", error)
+      })
   }
 
   // Parsed the API data for the chart to make is easier to implement.
@@ -67,8 +83,16 @@ class App extends Component {
 
     if (this.state.selectedGeoData === "events"){
       fetch(`/events/all/?selection=${this.state.selectedGeoData}&start=${this.state.startDate}&end=${this.state.endDate}`)
-        .then(results => results.json())
+        .then(results => {
+          if(results.status === 500){
+            window.alert("Rate Limit Exceeded.");
+            throw new Error(results.status)
+          } else return results.json();
+        })
         .then(results => this.setState({filteredGeoData: results}))
+        .catch(error => {
+          console.log("Error: ", error)
+        })
     } else {
       fetch(`/stats/all/?selection=${this.state.selectedGeoData}&start=${this.state.startDate}&end=${this.state.endDate}`)
         .then(results => {
@@ -77,8 +101,6 @@ class App extends Component {
             throw new Error(results.status)
           } else return results.json();
         })
-        // .then(results => {console.log("Made it here. Results: ", results)})
-        // .then(results => results.json())
         .then(jsonResults => this.setState({filteredGeoData: jsonResults}))
         .catch(error => {
           console.log("Error: ", error)
