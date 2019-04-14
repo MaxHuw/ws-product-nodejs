@@ -16,7 +16,8 @@ const pool = new pg.Pool({
 })
 
 ///////////////////////
-/// Rate limiter using Leaky Bucket
+/// Rate limiter Logic
+
 let leakRate = setInterval(leakBucket, 5000);
 let bucketLimit = 10;
 
@@ -34,28 +35,28 @@ function leakBucket(){
   console.log(usersBuckets)
 }
 
-function fillBucket(ip) {
+let checkBucket = function (req, res, next) {
 
-  usersBuckets[ip] ++
-  console.log('Filling Bucket ', ' +1');
+  let ip = req.connection.remoteAddress
 
-}
-
-function checkBucket(ip){
-
-  if (usersBuckets[ip] && usersBuckets[ip] < 10){
-    fillBucket(ip);
-    return false;
-  } else if (usersBuckets[ip] && usersBuckets[ip] === 10){
-    return true;
+  if (usersBuckets[ip] && usersBuckets[ip] < bucketLimit){
+    usersBuckets[ip] ++
+    console.log('Filling Bucket ', ' +1');
+    return next();
+  } else if (usersBuckets[ip] && usersBuckets[ip] === bucketLimit){
+    return res.status(500).json({error: 'Rate Limit Exceeded'});
   } else {
     usersBuckets[ip] = 1;
     console.log('Filling Bucket ', ' +1');
+    return next();
   }
 
 }
 
 /////////////////////////////
+
+
+app.use(checkBucket); //custom middleware for rate limiting
 
 const queryHandler = (req, res, next) => {
   pool.query(req.sqlQuery).then((r) => {
@@ -65,18 +66,10 @@ const queryHandler = (req, res, next) => {
 
 app.get('/', (req, res) => {
 
-  if (checkBucket(req.connection.remoteAddress)){
-    return res.status(500).json({error: 'Rate Limit Exceeded'});
-  }
-
   res.send('Welcome to EQ Works 😎')
 })
 
 app.get('/events/hourly', (req, res, next) => {
-
-  if (checkBucket(req.connection.remoteAddress)){
-    return res.status(500).json({error: 'Rate Limit Exceeded'});
-  }
 
   req.sqlQuery = `
     SELECT date, hour, events
@@ -89,10 +82,6 @@ app.get('/events/hourly', (req, res, next) => {
 }, queryHandler)
 
 app.get('/events/daily', (req, res, next) => {
-
-  if (checkBucket(req.connection.remoteAddress)){
-    return res.status(500).json({error: 'Rate Limit Exceeded'});
-  }
 
   let start = req.query.start;
   let end = req.query.end;
@@ -113,10 +102,6 @@ app.get('/events/daily', (req, res, next) => {
 
 app.get('/stats/hourly', (req, res, next) => {
 
-  if (checkBucket(req.connection.remoteAddress)){
-    return res.status(500).json({error: 'Rate Limit Exceeded'});
-  }
-
   req.sqlQuery = `
     SELECT date, hour, impressions, clicks, revenue
     FROM public.hourly_stats
@@ -127,10 +112,6 @@ app.get('/stats/hourly', (req, res, next) => {
 }, queryHandler)
 
 app.get('/stats/daily', (req, res, next) => {
-
-  if (checkBucket(req.connection.remoteAddress)){
-    return res.status(500).json({error: 'Rate Limit Exceeded'});
-  }
 
   req.sqlQuery = `
     SELECT date,
@@ -152,10 +133,6 @@ app.get('/stats/daily', (req, res, next) => {
 
 app.get('/stats/all/', (req, res, next) => {
 
-  if (checkBucket(req.connection.remoteAddress)){
-    return res.status(500).json({error: 'Rate Limit Exceeded'});
-  }
-
   let start = req.query.start;
   let end = req.query.end;
   let selection = req.query.selection;
@@ -175,10 +152,6 @@ app.get('/stats/all/', (req, res, next) => {
 }, queryHandler)
 
 app.get('/events/all/', (req, res, next) => {
-
-  if (checkBucket(req.connection.remoteAddress)){
-    return res.status(500).json({error: 'Rate Limit Exceeded'});
-  }
 
   let start = req.query.start;
   let end = req.query.end;
@@ -200,10 +173,6 @@ app.get('/events/all/', (req, res, next) => {
 ///////////////////////////////////
 
 app.get('/poi', (req, res, next) => {
-
-  if (checkBucket(req.connection.remoteAddress)){
-    return res.status(500).json({error: 'Rate Limit Exceeded'});
-  }
 
   req.sqlQuery = `
     SELECT *
