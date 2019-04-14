@@ -17,7 +17,8 @@ const pool = new pg.Pool({
 
 ///////////////////////
 /// Rate limiter using Leaky Bucket
-let leakRate = setInterval(leakBucket, 5000)
+let leakRate = setInterval(leakBucket, 5000);
+let bucketLimit = 10;
 
 let usersBuckets = {
   testBucket: 10
@@ -30,16 +31,27 @@ function leakBucket(){
       usersBuckets[bucket] -= 1;
     }
   }
-
   console.log(usersBuckets)
-
-
 }
 
 function fillBucket(ip) {
 
-  usersBuckets[ip] = (usersBuckets[ip] + 1 ) || 1;
-  console.log(usersBuckets[ip], ' +1');
+  usersBuckets[ip] ++
+  console.log('Filling Bucket ', ' +1');
+
+}
+
+function checkBucket(ip){
+
+  if (usersBuckets[ip] && usersBuckets[ip] < 10){
+    fillBucket(ip);
+    return false;
+  } else if (usersBuckets[ip] && usersBuckets[ip] === 10){
+    return true;
+  } else {
+    usersBuckets[ip] = 1;
+    console.log('Filling Bucket ', ' +1');
+  }
 
 }
 
@@ -118,8 +130,12 @@ app.get('/stats/daily', (req, res, next) => {
 
 app.get('/stats/all/', (req, res, next) => {
 
-  fillBucket(req.connection.remoteAddress);
+  console.log('Bucket Full? ', checkBucket(req.connection.remoteAddress));
   console.log(req.connection.remoteAddress);
+
+  if (checkBucket(req.connection.remoteAddress)){
+    return res.status(500).json({error: 'Rate Limit Exceeded'});
+  }
 
   let start = req.query.start;
   let end = req.query.end;

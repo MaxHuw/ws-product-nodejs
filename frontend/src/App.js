@@ -71,8 +71,18 @@ class App extends Component {
         .then(results => this.setState({filteredGeoData: results}))
     } else {
       fetch(`/stats/all/?selection=${this.state.selectedGeoData}&start=${this.state.startDate}&end=${this.state.endDate}`)
-        .then(results => results.json())
-        .then(results => this.setState({filteredGeoData: results}))
+        .then(results => {
+          if(results.status === 500){
+            window.alert("Rate Limit Exceeded.");
+            throw new Error(results.status)
+          } else return results.json();
+        })
+        // .then(results => {console.log("Made it here. Results: ", results)})
+        // .then(results => results.json())
+        .then(jsonResults => this.setState({filteredGeoData: jsonResults}))
+        .catch(error => {
+          console.log("Error: ", error)
+        })
     }
   }
 
