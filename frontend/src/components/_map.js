@@ -1,5 +1,5 @@
 import React from "react";
-import { Map as LeafletMap, TileLayer, Marker, Popup } from 'react-leaflet';
+import { Map as LeafletMap, TileLayer, Marker, Popup, CircleMarker } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 
 
@@ -42,6 +42,26 @@ class Map extends React.Component {
       this.apiFetch('events');
     } else {
       this.apiFetch('stats')
+    }
+  }
+
+  circleMarkerColor = (value) => {
+
+    let minValue = this.state.filteredGeoData[0][this.state.selectedGeoData];
+    let maxValue = this.state.filteredGeoData[0][this.state.selectedGeoData];
+    let range = maxValue - minValue;
+
+    let percentage = (value - minValue) / range;
+     
+    this.state.filteredGeoData.map(location => {
+      minValue = (location[this.state.selectedGeoData] < minValue) ? location[this.state.selectedGeoData] : minValue;
+      maxValue = (location[this.state.selectedGeoData] < maxValue) ? location[this.state.selectedGeoData] : maxValue;
+    })
+
+    if (percentage > 0.5){
+      return 'red'
+    } else {
+      return 'blue'
     }
   }
 
@@ -93,13 +113,13 @@ class Map extends React.Component {
             />
             <MarkerClusterGroup>
               {(this.state.filteredGeoData).map((location, i) =>
-                  <Marker key={i} position={[location.poi_lat, location.poi_lon]}>
+                  <CircleMarker key={i} center={[location.poi_lat, location.poi_lon]} color={this.circleMarkerColor(location[this.state.selectedGeoData])} radius={20}>
                     <Popup>
                       {location.poi_name} <br />
                       {this.state.selectedGeoData} <br />
                       {location[this.state.selectedGeoData]}
                     </Popup>
-                  </Marker> 
+                  </CircleMarker> 
                 )}
             </MarkerClusterGroup>
 
