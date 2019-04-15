@@ -4,8 +4,29 @@ import { isArray } from 'util';
 
 class Tables extends React.Component {
 
+  state = {
+    searchTerm: ''
+  }
+
   //TODO: 1) Make search field work. 
   //      2) Look into pagination.
+
+
+
+  searchTable = (event) => {
+    this.setState({searchTerm: event.target.value});
+  }
+
+  highlightSearchTerm = (cellValue) => {
+    
+    let cellText = cellValue.toString();
+
+    if (cellText.includes(this.state.searchTerm)){
+      return <em>{cellText}</em>
+    } else {
+      return cellText
+    }
+  }
 
   componentDidMount(){
 
@@ -22,7 +43,7 @@ class Tables extends React.Component {
         <div>
 
           <div className="ui input">
-            <input type="text" placeholder="Search..."></input>
+            <input type="text" placeholder="Search..." onChange={this.searchTable}></input>
           </div>
 
           <Table className="ui sortable celled table">
@@ -41,9 +62,9 @@ class Tables extends React.Component {
                 (this.props.data).map((entry, i) =>
                 <Table.Row key={i}>
                   {
-                    Object.values(entry).map((value, i) =>
-                      <Table.Cell key={i}>{value}</Table.Cell>
-                    )
+                    Object.values(entry).map((value, i) => {
+                      return <Table.Cell key={i}>{this.highlightSearchTerm(value)}</Table.Cell>
+                    })
                   }
                 </Table.Row>
                 )
