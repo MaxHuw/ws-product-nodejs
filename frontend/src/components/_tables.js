@@ -5,13 +5,8 @@ import { isArray } from 'util';
 class Tables extends React.Component {
 
   state = {
-    searchTerm: ''
+    searchTerm: null
   }
-
-  //TODO: 1) Make search field work. 
-  //      2) Look into pagination.
-
-
 
   searchTable = (event) => {
     this.setState({searchTerm: event.target.value});
@@ -21,7 +16,7 @@ class Tables extends React.Component {
     
     let cellText = cellValue.toString();
 
-    if (cellText.includes(this.state.searchTerm)){
+    if (cellText.includes(this.state.searchTerm) && this.state.searchTerm !== ''){
       return <em>{cellText}</em>
     } else {
       return cellText
