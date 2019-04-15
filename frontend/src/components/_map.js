@@ -18,35 +18,29 @@ class Map extends React.Component {
     this.setState({selectedGeoData: event.target.value});
   }
 
+  apiFetch = (api) => {
+    fetch(`/${api}/all/?selection=${this.state.selectedGeoData}&start=${this.state.startDate}&end=${this.state.endDate}`)
+    .then(results => {
+      if(results.status === 500){
+        window.alert("Rate Limit Exceeded.");
+        throw new Error(results.status)
+      } else return results.json();
+    })
+    .then(results => this.setState({filteredGeoData: results}))
+    .catch(error => {
+      console.log("Error: ", error)
+    })
+  }
+
   filterGeoData = (event) => {
     event.preventDefault();
 
     //TODO Check that date inputs are valid.
 
     if (this.state.selectedGeoData === "events"){
-      fetch(`/events/all/?selection=${this.state.selectedGeoData}&start=${this.state.startDate}&end=${this.state.endDate}`)
-        .then(results => {
-          if(results.status === 500){
-            window.alert("Rate Limit Exceeded.");
-            throw new Error(results.status)
-          } else return results.json();
-        })
-        .then(results => this.setState({filteredGeoData: results}))
-        .catch(error => {
-          console.log("Error: ", error)
-        })
+      this.apiFetch('events');
     } else {
-      fetch(`/stats/all/?selection=${this.state.selectedGeoData}&start=${this.state.startDate}&end=${this.state.endDate}`)
-        .then(results => {
-          if(results.status === 500){
-            window.alert("Rate Limit Exceeded.");
-            throw new Error(results.status)
-          } else return results.json();
-        })
-        .then(jsonResults => this.setState({filteredGeoData: jsonResults}))
-        .catch(error => {
-          console.log("Error: ", error)
-        })
+      this.apiFetch('stats')
     }
   }
 
