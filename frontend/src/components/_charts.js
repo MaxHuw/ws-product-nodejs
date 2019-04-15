@@ -12,12 +12,12 @@ class Charts extends React.Component {
     new Chart(document.getElementById("bar-chart"), {
       type: 'bar',
       data: {
-        labels: Object.keys(this.props.parsedChartData),
+        labels: Object.keys(this.props.chartData),
         datasets: [
           {
             label: "Number of Events",
             backgroundColor: "#3e95cd",
-            data: Object.values(this.props.parsedChartData)
+            data: Object.values(this.props.chartData)
           }
         ]
       },
@@ -52,7 +52,7 @@ class Charts extends React.Component {
   }
 
   render() {
-    if (this.props.parsedChartData){
+    if (this.props.chartData){
       return (
         <div>
           <canvas id="bar-chart" width="800" height="450"></canvas>
