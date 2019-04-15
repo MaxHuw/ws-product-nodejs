@@ -15,6 +15,49 @@ const pool = new pg.Pool({
   port: process.env.PGPORT
 })
 
+///////////////////////
+/// Rate limiter Logic
+
+let leakRate = setInterval(leakBucket, 5000);
+let bucketLimit = 10;
+
+let usersBuckets = {
+  testBucket: 10
+}
+
+function leakBucket(){
+
+  for (let bucket in usersBuckets){
+    if (usersBuckets[bucket] > 0){
+      usersBuckets[bucket] -= 1;
+    }
+  }
+  console.log(usersBuckets)
+}
+
+let checkBucket = function (req, res, next) {
+
+  let ip = req.connection.remoteAddress
+
+  if (usersBuckets[ip] && usersBuckets[ip] < bucketLimit){
+    usersBuckets[ip] ++
+    console.log('Filling Bucket ', ' +1');
+    return next();
+  } else if (usersBuckets[ip] && usersBuckets[ip] === bucketLimit){
+    return res.status(500).json({error: 'Rate Limit Exceeded'});
+  } else {
+    usersBuckets[ip] = 1;
+    console.log('Filling Bucket ', ' +1');
+    return next();
+  }
+
+}
+
+/////////////////////////////
+
+
+app.use(checkBucket); //custom middleware for rate limiting
+
 const queryHandler = (req, res, next) => {
   pool.query(req.sqlQuery).then((r) => {
     return res.json(r.rows || [])
@@ -22,10 +65,12 @@ const queryHandler = (req, res, next) => {
 }
 
 app.get('/', (req, res) => {
+
   res.send('Welcome to EQ Works 😎')
 })
 
 app.get('/events/hourly', (req, res, next) => {
+
   req.sqlQuery = `
     SELECT date, hour, events
     FROM public.hourly_events
@@ -56,6 +101,7 @@ app.get('/events/daily', (req, res, next) => {
 }, queryHandler)
 
 app.get('/stats/hourly', (req, res, next) => {
+
   req.sqlQuery = `
     SELECT date, hour, impressions, clicks, revenue
     FROM public.hourly_stats
@@ -66,6 +112,7 @@ app.get('/stats/hourly', (req, res, next) => {
 }, queryHandler)
 
 app.get('/stats/daily', (req, res, next) => {
+
   req.sqlQuery = `
     SELECT date,
         SUM(impressions) AS impressions,
@@ -85,8 +132,6 @@ app.get('/stats/daily', (req, res, next) => {
 // Could have used existing routes, but decided to do my own.
 
 app.get('/stats/all/', (req, res, next) => {
-
-  console.log(req.connection.remoteAddress);
 
   let start = req.query.start;
   let end = req.query.end;
@@ -128,6 +173,7 @@ app.get('/events/all/', (req, res, next) => {
 ///////////////////////////////////
 
 app.get('/poi', (req, res, next) => {
+
   req.sqlQuery = `
     SELECT *
     FROM public.poi;
