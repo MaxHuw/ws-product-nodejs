@@ -58,10 +58,26 @@ class Map extends React.Component {
       maxValue = (location[this.state.selectedGeoData] < maxValue) ? location[this.state.selectedGeoData] : maxValue;
     })
 
-    if (percentage > 0.5){
-      return 'red'
-    } else {
-      return 'blue'
+    if (percentage < 0.1){
+      return '#4665f2'
+    } else if (percentage < 0.2 && percentage >= 0.1){
+      return '#5264ee'
+    } else if (percentage < 0.3 && percentage >= 0.2){
+      return '#6163e7'
+    } else if (percentage < 0.4 && percentage >= 0.3){
+      return '#7261df'
+    } else if (percentage < 0.5 && percentage >= 0.4){
+      return '#835ed4'
+    } else if (percentage < 0.6 && percentage >= 0.5){
+      return '#965ac4'
+    } else if (percentage < 0.7 && percentage >= 0.6){
+      return '#aa55b0'
+    } else if (percentage < 0.8 && percentage >= 0.7){
+      return '#bd4e98'
+    } else if (percentage < 0.9 && percentage >= 0.8){
+      return '#d0467c'
+    } else if (percentage >= 0.9){
+      return '#e03b5e'
     }
   }
 
