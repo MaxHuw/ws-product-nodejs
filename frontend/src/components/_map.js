@@ -1,5 +1,6 @@
 import React from "react";
 import { Map as LeafletMap, TileLayer, Marker, Popup } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-markercluster';
 
 
 class Map extends React.Component {
@@ -90,15 +91,18 @@ class Map extends React.Component {
             <TileLayer
               url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
             />
-            {(this.state.filteredGeoData).map((location, i) =>
-                <Marker key={i} position={[location.poi_lat, location.poi_lon]}>
-                  <Popup>
-                    {location.poi_name} <br />
-                    {this.state.selectedGeoData} <br />
-                    {location[this.state.selectedGeoData]}
-                  </Popup>
-                </Marker> 
-              )}
+            <MarkerClusterGroup>
+              {(this.state.filteredGeoData).map((location, i) =>
+                  <Marker key={i} position={[location.poi_lat, location.poi_lon]}>
+                    <Popup>
+                      {location.poi_name} <br />
+                      {this.state.selectedGeoData} <br />
+                      {location[this.state.selectedGeoData]}
+                    </Popup>
+                  </Marker> 
+                )}
+            </MarkerClusterGroup>
+
           </LeafletMap>
         </div>  
       );

@@ -32,7 +32,7 @@ function leakBucket(){
       usersBuckets[bucket] -= 1;
     }
   }
-  console.log(usersBuckets)
+  // console.log(usersBuckets)
 }
 
 let checkBucket = function (req, res, next) {
