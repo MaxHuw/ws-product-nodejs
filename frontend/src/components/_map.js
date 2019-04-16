@@ -1,7 +1,33 @@
 import React from "react";
 import { Map as LeafletMap, TileLayer, Marker, Popup, CircleMarker } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
+import styled from "styled-components";
 
+
+////////////////////////////
+// Styling
+
+const MapHeader = styled.div`
+
+`
+
+const StyledP = styled.p`
+  font-size: 1em;
+  text-align: left;
+  margin: 0;
+`
+
+const MapForm = styled.form`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-top: 10px;
+  padding-bottom: 10px;
+`
+
+
+/////////////////
 
 class Map extends React.Component {
 
@@ -35,8 +61,6 @@ class Map extends React.Component {
 
   filterGeoData = (event) => {
     event.preventDefault();
-
-    //TODO Check that date inputs are valid.
 
     if (this.state.selectedGeoData === "events"){
       this.apiFetch('events');
@@ -94,27 +118,30 @@ class Map extends React.Component {
 
       return (
         <div>
-          <form className="ui form" onSubmit={this.filterGeoData}>
-            <div className="field">
-              <select onChange={this.selectGeoData}>
-                <option value="">Data</option>
-                <option value="events">Events</option>
-                <option value="impressions">Impressions</option>
-                <option value="clicks">Clicks</option>
-                <option value="revenue">Revenue</option>
-              </select>
-            </div>
-            
-            <div className="field">
-              <input type="text" name="start-date" placeholder="Start Date yyyy-mm-dd" onChange={this.handleChangeStartDate}></input>
-            </div>
+          <MapHeader>
+            <StyledP>Data available for dates between 2017-01-01 and 2017-06-16.</StyledP>
+            <MapForm className="ui form" onSubmit={this.filterGeoData}>
+              <div className="field">
+                <select onChange={this.selectGeoData}>
+                  <option value="">Data</option>
+                  <option value="events">Events</option>
+                  <option value="impressions">Impressions</option>
+                  <option value="clicks">Clicks</option>
+                  <option value="revenue">Revenue</option>
+                </select>
+              </div>
+              
+              <div className="field">
+                <input type="datetime-local" name="start-date" min="2017-01-01T00:00" max="2017-06-16T00:00" onChange={this.handleChangeStartDate}></input>
+              </div>
 
-            <div className="field">
-              <input type="text" name="end-date" placeholder="End Date yyyy-mm-dd" onChange={this.handleChangeEndDate}></input>
-            </div>
+              <div className="field">
+                <input type="datetime-local" name="end-date" min="2017-01-01T00:00" max="2017-06-16T00:00" onChange={this.handleChangeEndDate}></input>
+              </div>
 
-            <button className="ui button" type="submit">Submit</button>
-          </form>
+              <button className="ui button" type="submit">Submit</button>
+            </MapForm>
+          </MapHeader>
 
           <LeafletMap
             center={[50, -100]}

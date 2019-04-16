@@ -3,6 +3,40 @@ import './App.css';
 import Charts from './components/_charts.js';
 import Tables from './components/_tables.js';
 import Map from './components/_map.js';
+import styled from "styled-components";
+
+
+////////////////////////////
+// Styling
+
+const ChartContainer = styled.div`
+  margin-top: 30px;
+  margin-bottom:15px;
+  align-content: center;
+  width: 900px;
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+`
+
+const TableContainer = styled.div`
+  margin-top: 15px;
+  margin-bottom: 15px;
+  width: 900px;
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+`
+
+const MapContainer = styled.div`
+  margin-top: 15px;
+  margin-bottom: 30px;
+  width: 900px;
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+`
+//////////////////////
 
 
 class App extends Component {
@@ -70,17 +104,17 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           
-          <div className="chart-container component-container">
+          <ChartContainer>
             <Charts chartData={this.state.formatedChartData} getChartAndTableData={this.getChartAndTableData} />
-          </div>
+          </ChartContainer>
           
-          <div className="table-container component-container">
+          <TableContainer>
             <Tables data={this.state.chartAndTableData}/>
-          </div>
+          </TableContainer>
 
-          <div className="map-container component-container">
+          <MapContainer>
             <Map />
-          </div>
+          </MapContainer>
         </header>
       </div>
     );
