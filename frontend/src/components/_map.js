@@ -160,17 +160,15 @@ class Map extends React.Component {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             
-            <MarkerClusterGroup>
-              {(this.state.filteredGeoData).map((location, i) =>
-                <Marker key={i} position={[location.poi_lat, location.poi_lon]}>
-                  <Popup>
-                    {location.poi_name} <br />
-                    {this.state.selectedGeoData} <br />
-                    {location[this.state.selectedGeoData]}
-                  </Popup>
-                </Marker> 
-              )}
-            </MarkerClusterGroup>
+            {(this.state.filteredGeoData).map((location, i) =>
+              <CircleMarker key={i} center={[location.poi_lat, location.poi_lon]} color={this.circleColor(location[this.state.selectedGeoData])} radius={20}>
+                <Popup>
+                  {location.poi_name} <br />
+                  {this.state.selectedGeoData} <br />
+                  {location[this.state.selectedGeoData]}
+                </Popup>
+              </CircleMarker> 
+            )}
             
           </LeafletMap>
         </div>  
@@ -179,6 +177,10 @@ class Map extends React.Component {
 }
 
 export default Map;
+
+// Tried to get clustering to work with the CircleMakers,
+// but it crashes the app. Clustering works with regular Marker
+// tags with code below.
 
 
 // <MarkerClusterGroup>
@@ -193,14 +195,4 @@ export default Map;
 //   )}
 // </MarkerClusterGroup>
 
-
-// {(this.state.filteredGeoData).map((location, i) =>
-//   <CircleMarker key={i} center={[location.poi_lat, location.poi_lon]} color={this.circleColor(location[this.state.selectedGeoData])} radius={20}>
-//     <Popup>
-//       {location.poi_name} <br />
-//       {this.state.selectedGeoData} <br />
-//       {location[this.state.selectedGeoData]}
-//     </Popup>
-//   </CircleMarker> 
-// )}
 

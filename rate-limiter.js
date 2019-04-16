@@ -1,5 +1,5 @@
-let leakRate = setInterval(leakBucket, 5000);
-let bucketLimit = 10;
+let leakRate = setInterval(leakBucket, 5000); //how often to drain the 'buckets'
+let bucketLimit = 10; //limit at which a user will no longer be able to make any more api calls.
 
 let usersBuckets = {
 }

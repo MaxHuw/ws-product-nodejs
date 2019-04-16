@@ -91,7 +91,6 @@ app.get('/stats/daily', (req, res, next) => {
 ////////////////////////////////////////////////
 // APIs made from scratch.
 // Used for the geo visualization portion of the work sample.
-// Could have used existing routes, but decided to do my own.
 
 app.get('/stats/all/', (req, res, next) => {
 
