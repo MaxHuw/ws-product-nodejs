@@ -43,14 +43,6 @@ class Tables extends React.Component {
     }
   }
 
-  componentDidMount(){
-
-  }
-
-  componentDidUpdate(){
-    
-  }
-
   render() {
 
     if (isArray(this.props.data)){

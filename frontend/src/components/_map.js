@@ -1,8 +1,7 @@
 import React from "react";
-import { Map as LeafletMap, TileLayer, Marker, Popup, CircleMarker } from 'react-leaflet';
+import { Map as LeafletMap, TileLayer, Marker, Popup, CircleMarker} from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import styled from "styled-components";
-
 
 ////////////////////////////
 // Styling
@@ -26,14 +25,14 @@ const MapForm = styled.form`
   padding-bottom: 10px;
 `
 
-
 /////////////////
+
 
 class Map extends React.Component {
 
   state = {
-    endDate: '2017-04-23',
-    startDate: '2017-01-01',
+    endDate: '2017-06-16T00:00',
+    startDate: '2017-01-01T00:00',
     selectedGeoData: "events",
     filteredGeoData: []
   }
@@ -69,51 +68,52 @@ class Map extends React.Component {
     }
   }
 
-  // circleMarkerColor = (value) => {
+  
+  circleColor = (value) => {
 
-  //   console.log('value', value);
-  //   let minValue = (this.state.filteredGeoData[0])[this.state.selectedGeoData];
-  //   let maxValue = (this.state.filteredGeoData[0])[this.state.selectedGeoData];
-  //   let range = maxValue - minValue;
+    //returns a color on a scale of blue to red, 
+    //based on relative value of the data point 
+    //compared to the min and max values.
+    
+    let minValue = this.state.filteredGeoData[0][this.state.selectedGeoData];
+    let maxValue = this.state.filteredGeoData[0][this.state.selectedGeoData];
 
-  //   let percentage = (value - minValue) / range;
-     
-  //   this.state.filteredGeoData.map(location => {
-  //     minValue = (location[this.state.selectedGeoData] < minValue) ? location[this.state.selectedGeoData] : minValue;
-  //     maxValue = (location[this.state.selectedGeoData] < maxValue) ? location[this.state.selectedGeoData] : maxValue;
-  //   })
-  //   console.log('min value', minValue)
+    for (let object of this.state.filteredGeoData){
+      if (object[this.state.selectedGeoData] < minValue){
+        minValue = Number(object[this.state.selectedGeoData]);
+      } else if (object[this.state.selectedGeoData] > maxValue) {
+        maxValue = Number(object[this.state.selectedGeoData]);
+      }
+    }
 
-  //   console.log('percentage ', percentage);
+    let difference = maxValue - minValue;
 
-  //   if (percentage < 0.1){
-  //     return '#4665f2'
-  //   } else if (percentage < 0.2 && percentage >= 0.1){
-  //     return '#5264ee'
-  //   } else if (percentage < 0.3 && percentage >= 0.2){
-  //     return '#6163e7'
-  //   } else if (percentage < 0.4 && percentage >= 0.3){
-  //     return '#7261df'
-  //   } else if (percentage < 0.5 && percentage >= 0.4){
-  //     return '#835ed4'
-  //   } else if (percentage < 0.6 && percentage >= 0.5){
-  //     return '#965ac4'
-  //   } else if (percentage < 0.7 && percentage >= 0.6){
-  //     return '#aa55b0'
-  //   } else if (percentage < 0.8 && percentage >= 0.7){
-  //     return '#bd4e98'
-  //   } else if (percentage < 0.9 && percentage >= 0.8){
-  //     return '#d0467c'
-  //   } else if (percentage >= 0.9){
-  //     return '#e03b5e'
-  //   }
-  // }
+    let percentage = (value - minValue) / difference;
 
-
-  componentDidMount(){
+    if (percentage < 0.1){
+      return '#4665f2'
+    } else if (percentage < 0.2 && percentage >= 0.1){
+      return '#5264ee'
+    } else if (percentage < 0.3 && percentage >= 0.2){
+      return '#6163e7'
+    } else if (percentage < 0.4 && percentage >= 0.3){
+      return '#7261df'
+    } else if (percentage < 0.5 && percentage >= 0.4){
+      return '#835ed4'
+    } else if (percentage < 0.6 && percentage >= 0.5){
+      return '#965ac4'
+    } else if (percentage < 0.7 && percentage >= 0.6){
+      return '#aa55b0'
+    } else if (percentage < 0.8 && percentage >= 0.7){
+      return '#bd4e98'
+    } else if (percentage < 0.9 && percentage >= 0.8){
+      return '#d0467c'
+    } else if (percentage >= 0.9){
+      return '#e03b5e'
+    }
 
   }
-  
+
   render() {
 
       return (
@@ -132,11 +132,11 @@ class Map extends React.Component {
               </div>
               
               <div className="field">
-                <input type="datetime-local" name="start-date" min="2017-01-01T00:00" max="2017-06-16T00:00" onChange={this.handleChangeStartDate}></input>
+                <input type="datetime-local" name="start-date" value={this.state.startDate} min="2017-01-01T00:00" max="2017-06-16T00:00" onChange={this.handleChangeStartDate}></input>
               </div>
 
               <div className="field">
-                <input type="datetime-local" name="end-date" min="2017-01-01T00:00" max="2017-06-16T00:00" onChange={this.handleChangeEndDate}></input>
+                <input type="datetime-local" name="end-date" value={this.state.endDate} min="2017-01-01T00:00" max="2017-06-16T00:00" onChange={this.handleChangeEndDate}></input>
               </div>
 
               <button className="ui button" type="submit">Submit</button>
@@ -159,17 +159,17 @@ class Map extends React.Component {
               attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <MarkerClusterGroup>
+            
               {(this.state.filteredGeoData).map((location, i) =>
-                  <Marker key={i} position={[location.poi_lat, location.poi_lon]} >
+                  <CircleMarker key={i} center={[location.poi_lat, location.poi_lon]} color={this.circleColor(location[this.state.selectedGeoData])} radius={20}>
                     <Popup>
                       {location.poi_name} <br />
                       {this.state.selectedGeoData} <br />
                       {location[this.state.selectedGeoData]}
                     </Popup>
-                  </Marker> 
+                  </CircleMarker> 
                 )}
-            </MarkerClusterGroup>
+            
           </LeafletMap>
         </div>  
       );
@@ -177,18 +177,3 @@ class Map extends React.Component {
 }
 
 export default Map;
-
-//Code that does not work. CircleMarker has an issue with MarkerClusterGroup.
-// Loads first time, buy once you change anything, it crashes the app.
-
-{/* <MarkerClusterGroup>
-{(this.state.filteredGeoData).map((location, i) =>
-    <CircleMarker key={i} center={[location.poi_lat, location.poi_lon]} >
-      <Popup>
-        {location.poi_name} <br />
-        {this.state.selectedGeoData} <br />
-        {location[this.state.selectedGeoData]}
-      </Popup>
-    </CircleMarker> 
-  )}
-</MarkerClusterGroup> */}
