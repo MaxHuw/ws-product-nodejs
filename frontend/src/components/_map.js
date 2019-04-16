@@ -71,10 +71,10 @@ class Map extends React.Component {
   
   circleColor = (value) => {
 
-    console.log(value);
-    console.log(this.state.filteredGeoData);
-    console.log(this.state.filteredGeoData[0][this.state.selectedGeoData])
-
+    //returns a color on a scale of blue to red, 
+    //based on relative value of the data point 
+    //compared to the min and max values.
+    
     let minValue = this.state.filteredGeoData[0][this.state.selectedGeoData];
     let maxValue = this.state.filteredGeoData[0][this.state.selectedGeoData];
 
@@ -89,8 +89,6 @@ class Map extends React.Component {
     let difference = maxValue - minValue;
 
     let percentage = (value - minValue) / difference;
-
-    console.log(minValue, maxValue, percentage)
 
     if (percentage < 0.1){
       return '#4665f2'
