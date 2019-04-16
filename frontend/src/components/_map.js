@@ -146,7 +146,7 @@ class Map extends React.Component {
           <LeafletMap
             center={[50, -100]}
             zoom={3}
-            maxZoom={10}
+            maxZoom={16}
             attributionControl={true}
             zoomControl={true}
             doubleClickZoom={true}
