@@ -162,6 +162,7 @@ class Map extends React.Component {
             <MarkerClusterGroup>
               {(this.state.filteredGeoData).map((location, i) =>
                   <Marker key={i} position={[location.poi_lat, location.poi_lon]} >
+                   <circle cx="60" cy="60" r="50"/>
                     <Popup>
                       {location.poi_name} <br />
                       {this.state.selectedGeoData} <br />
