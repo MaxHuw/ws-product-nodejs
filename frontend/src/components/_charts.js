@@ -4,9 +4,6 @@ const Chart = require("chart.js")
 
 class Charts extends React.Component {
 
-  ////////////////////
-  // Functions
-
   renderChart = () => {
 
     new Chart(document.getElementById("bar-chart"), {
@@ -26,7 +23,7 @@ class Charts extends React.Component {
         title: {
           display: true,
           fontSize: 24,
-          text: 'Total Number of Events by Hour.'
+          text: 'Total Number of Events by Hour'
         },
         scales: {
           yAxes: [{

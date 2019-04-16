@@ -2,11 +2,14 @@ const express = require('express')
 const pg = require('pg')
 const dotenv = require('dotenv').config();
 
+const rateLimiter = require('./rate-limiter')
+
 //TODO Rate Limiting on all API endpoints.
 
 const app = express()
 // configs come from standard PostgreSQL env vars
 // https://www.postgresql.org/docs/9.6/static/libpq-envars.html
+
 const pool = new pg.Pool({
   user: process.env.PGUSER,
   host: process.env.PGHOST,
@@ -15,48 +18,7 @@ const pool = new pg.Pool({
   port: process.env.PGPORT
 })
 
-///////////////////////
-/// Rate limiter Logic
-
-let leakRate = setInterval(leakBucket, 5000);
-let bucketLimit = 10;
-
-let usersBuckets = {
-  testBucket: 10
-}
-
-function leakBucket(){
-
-  for (let bucket in usersBuckets){
-    if (usersBuckets[bucket] > 0){
-      usersBuckets[bucket] -= 1;
-    }
-  }
-  // console.log(usersBuckets)
-}
-
-let checkBucket = function (req, res, next) {
-
-  let ip = req.connection.remoteAddress
-
-  if (usersBuckets[ip] && usersBuckets[ip] < bucketLimit){
-    usersBuckets[ip] ++
-    // console.log('Filling Bucket ', ' +1');
-    return next();
-  } else if (usersBuckets[ip] && usersBuckets[ip] === bucketLimit){
-    return res.status(500).json({error: 'Rate Limit Exceeded'});
-  } else {
-    usersBuckets[ip] = 1;
-    console.log('Filling Bucket ', ' +1');
-    return next();
-  }
-
-}
-
-/////////////////////////////
-
-
-app.use(checkBucket); //custom middleware for rate limiting
+app.use(rateLimiter.checkBucket);
 
 const queryHandler = (req, res, next) => {
   pool.query(req.sqlQuery).then((r) => {
@@ -85,18 +47,18 @@ app.get('/events/daily', (req, res, next) => {
 
   let start = req.query.start;
   let end = req.query.end;
-  console.log("start: ", start)
 
   req.sqlQuery = `
-    SELECT date, SUM(events) AS events
-    FROM public.hourly_events
-    WHERE 
-      date  >= '${start}' 
-      AND date < '${end}'
-    GROUP BY date
-    ORDER BY date
-    LIMIT 7;
+  SELECT date, SUM(events) AS events
+  FROM public.hourly_events
+  WHERE 
+    date  >= '${start}' 
+    AND date < '${end}'
+  GROUP BY date
+  ORDER BY date
+  LIMIT 7;
   `
+
   return next()
 }, queryHandler)
 

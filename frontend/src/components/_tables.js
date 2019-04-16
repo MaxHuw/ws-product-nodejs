@@ -1,6 +1,26 @@
 import React from 'react'
 import { Table } from 'semantic-ui-react'
 import { isArray } from 'util';
+import styled from "styled-components";
+
+
+////////////////////////////
+// Styling
+
+
+const TableContainerHeader = styled.div`
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin-top: 10px;
+`
+
+const HighlightedText = styled.em`
+  background-color: yellow;
+`
+
+////////////////
 
 class Tables extends React.Component {
 
@@ -17,7 +37,7 @@ class Tables extends React.Component {
     let cellText = cellValue.toString();
 
     if (cellText.includes(this.state.searchTerm) && this.state.searchTerm !== ''){
-      return <em>{cellText}</em>
+      return <HighlightedText>{cellText}</HighlightedText>
     } else {
       return cellText
     }
@@ -37,11 +57,11 @@ class Tables extends React.Component {
       return (
         <div>
          
-          <div className='table-container-header'>
+          <TableContainerHeader>
             <div className="ui input">
               <input type="text" placeholder="Search..." onChange={this.searchTable}></input>
             </div>
-          </div>
+          </TableContainerHeader>
         
 
           <Table className="ui sortable celled table">

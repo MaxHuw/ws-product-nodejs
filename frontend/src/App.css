@@ -2,12 +2,6 @@
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
-}
-
 .App-header {
   background-color: #f0f0f0;
   min-height: 100vh;
@@ -24,48 +18,4 @@
 
 .leaflet-container {
   height: 400px;
-}
-
-.chart-container {
-  margin-top: 30px;
-  margin-bottom:15px;
-  align-content: center;
-}
-
-.table-container {
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
-
-.map-container {
-  margin-top: 15px;
-  margin-bottom: 30px;
-}
-
-.table-container-header {
-  height: 50px;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  margin-top: 10px;
-}
-
-.form {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-
-.component-container {
-  width: 900px;
-  background: white;
-  border-radius: 20px;
-  padding: 20px;
-}
-
-em{
-  background-color: yellow
 }
