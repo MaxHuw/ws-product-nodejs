@@ -25,6 +25,7 @@ class Charts extends React.Component {
         legend: { display: false },
         title: {
           display: true,
+          fontSize: 24,
           text: 'Total Number of Events by Hour.'
         },
         scales: {

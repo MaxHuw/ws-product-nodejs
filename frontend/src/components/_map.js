@@ -94,27 +94,29 @@ class Map extends React.Component {
 
       return (
         <div>
-          <form className="ui form" onSubmit={this.filterGeoData}>
-            <div className="field">
-              <select onChange={this.selectGeoData}>
-                <option value="">Data</option>
-                <option value="events">Events</option>
-                <option value="impressions">Impressions</option>
-                <option value="clicks">Clicks</option>
-                <option value="revenue">Revenue</option>
-              </select>
-            </div>
-            
-            <div className="field">
-              <input type="text" name="start-date" placeholder="Start Date yyyy-mm-dd" onChange={this.handleChangeStartDate}></input>
-            </div>
+          <div className="map-header">
+            <form className="ui form" onSubmit={this.filterGeoData}>
+              <div className="field">
+                <select onChange={this.selectGeoData}>
+                  <option value="">Data</option>
+                  <option value="events">Events</option>
+                  <option value="impressions">Impressions</option>
+                  <option value="clicks">Clicks</option>
+                  <option value="revenue">Revenue</option>
+                </select>
+              </div>
+              
+              <div className="field">
+                <input type="text" name="start-date" placeholder="Start Date yyyy-mm-dd" onChange={this.handleChangeStartDate}></input>
+              </div>
 
-            <div className="field">
-              <input type="text" name="end-date" placeholder="End Date yyyy-mm-dd" onChange={this.handleChangeEndDate}></input>
-            </div>
+              <div className="field">
+                <input type="text" name="end-date" placeholder="End Date yyyy-mm-dd" onChange={this.handleChangeEndDate}></input>
+              </div>
 
-            <button className="ui button" type="submit">Submit</button>
-          </form>
+              <button className="ui button" type="submit">Submit</button>
+            </form>
+          </div>
 
           <LeafletMap
             center={[50, -100]}
