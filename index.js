@@ -41,7 +41,7 @@ let checkBucket = function (req, res, next) {
 
   if (usersBuckets[ip] && usersBuckets[ip] < bucketLimit){
     usersBuckets[ip] ++
-    console.log('Filling Bucket ', ' +1');
+    // console.log('Filling Bucket ', ' +1');
     return next();
   } else if (usersBuckets[ip] && usersBuckets[ip] === bucketLimit){
     return res.status(500).json({error: 'Rate Limit Exceeded'});

@@ -151,3 +151,17 @@ class Map extends React.Component {
 
 export default Map;
 
+//Code that does not work. CircleMarker has an issue with MarkerClusterGroup.
+// Loads first time, buy once you change anything, it crashes the app.
+
+{/* <MarkerClusterGroup>
+{(this.state.filteredGeoData).map((location, i) =>
+    <CircleMarker key={i} center={[location.poi_lat, location.poi_lon]} >
+      <Popup>
+        {location.poi_name} <br />
+        {this.state.selectedGeoData} <br />
+        {location[this.state.selectedGeoData]}
+      </Popup>
+    </CircleMarker> 
+  )}
+</MarkerClusterGroup> */}
